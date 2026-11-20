@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="240" viewBox="0 0 240 240" role="img" aria-labelledby="acsp-menu-icon-title">
+<title id="acsp-menu-icon-title">Auto CSP Manager</title>
+<!--
+	Monochrome build of the approved shield-and-swoosh mark, used as a CSS mask
+	for the WordPress sidebar icon. Only the alpha channel is read, so the fill
+	colour here is irrelevant: the icon takes the colour of the admin colour
+	scheme in use. The paths are the approved artwork unchanged; only the
+	viewBox and the wrapping transform differ, so the mark is centred and fills
+	the 20px menu slot instead of sitting in a corner of it.
+-->
+<g transform="translate(13 8) scale(0.95)">
+      <path d="M55 125
+               C31 143 14 166 22 184
+               C32 207 69 204 107 185
+               C126 176 145 164 159 151
+               C132 181 91 207 55 211
+               C20 214 1 196 8 173
+               C13 154 33 135 55 125 Z"
+            fill="#000000"/>
+      <path d="M120 13
+               L203 51
+               L200 116
+               C198 163 169 197 120 222
+               C71 197 42 163 40 116
+               L37 51 Z"
+            fill="none" stroke="#000000" stroke-width="16"
+            stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M78 113 L108 143 L165 86"
+            fill="none" stroke="#000000" stroke-width="19"
+            stroke-linecap="round" stroke-linejoin="round"/></g>
+</svg>

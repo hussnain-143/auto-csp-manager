@@ -1,0 +1,91 @@
+# Auto CSP Manager — files that must never enter version control.
+#
+# Everything the plugin needs at runtime is tracked. What is listed here is
+# either generated, machine-local, or downloaded on demand.
+
+# --- macOS / editors ---------------------------------------------------
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.sublime-workspace
+*.swp
+*~
+
+# --- Composer ----------------------------------------------------------
+# The plugin ships no autoloader and requires nothing at runtime: every
+# dependency in composer.json is dev-only (PHPUnit, PHPCS, WPCS).
+# composer.lock is deliberately NOT ignored — commit it when one is
+# generated, so a checkout reproduces the exact toolchain.
+/vendor/
+
+# --- Node ---------------------------------------------------------------
+# The plugin has no build step and ships no bundled JavaScript, so there is
+# nothing here today. Listed so that adding a tool later cannot commit a
+# dependency tree by accident.
+/node_modules/
+npm-debug.log*
+yarn-error.log*
+
+# --- Test and lint caches ----------------------------------------------
+.phpunit.result.cache
+.phpunit.cache/
+/phpcs.cache
+.phpcs-cache
+phpunit.xml
+phpunit-integration.xml
+phpcs.xml
+/coverage/
+/build/logs/
+clover.xml
+coverage.xml
+
+# --- Release artefacts -------------------------------------------------
+# bin/build-release.sh writes here. The ZIP is reproducible from a tag, so
+# it does not belong in the repository.
+/build/
+*.zip
+
+# --- Secrets -------------------------------------------------------------
+# A CSP plugin has no credentials of its own, but the Docker stacks and any
+# future deploy script might. Nothing matching these should ever be
+# committed, so they are refused by name rather than by vigilance.
+*.pem
+*.key
+!assets/**/*.key
+id_rsa
+id_rsa.*
+*.p12
+*.pfx
+credentials.json
+secrets.json
+auth.json
+wp-config.php
+
+# --- Local environment -------------------------------------------------
+.env
+.env.*
+!.env.example
+/wordpress/
+/wp-content/
+/.wordpress-org/
+*.sql
+*.sql.gz
+
+# --- Docker-generated data ---------------------------------------------
+/docker/data/
+/.docker-data/
+
+# --- Logs and scratch --------------------------------------------------
+*.log
+/logs/
+/tmp/
+/.tmp/
+/screenshots/
+*.orig
+*.rej
+*.bak

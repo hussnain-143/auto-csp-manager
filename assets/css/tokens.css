@@ -1,0 +1,146 @@
+/**
+ * Auto CSP Manager — design tokens.
+ *
+ * Every value the plugin's screens use lives here. Nothing in this file is a
+ * global style: the custom properties are declared on `.acsp-wrap`, which only
+ * ever wraps this plugin's own pages, so no other plugin's admin screen can
+ * inherit or be broken by them.
+ *
+ * Colour rule, enforced throughout: gold is for borders, fills and accents.
+ * #D6A72C on white measures roughly 2.1:1, which is below the WCAG 2.2 AA
+ * threshold for text, so it is never used for type. #A97912 ("deep gold")
+ * measures roughly 4.6:1 and is the only gold permitted for small text.
+ */
+
+/*
+ * Declared on the body as well as the wrapper.
+ *
+ * Custom properties inherit downwards only. Declaring them on `.acsp-wrap`
+ * alone left them undefined on `body`, so the page-background rule resolved
+ * to an invalid value, computed to `transparent`, and overrode the grey
+ * WordPress paints itself — which is why the screens rendered on a dark
+ * ground instead of the soft surface this palette describes.
+ */
+body.acsp-screen,
+.acsp-wrap {
+	/* --- Brand ------------------------------------------------------- */
+	--acsp-gold: #d6a72c;        /* Primary accent: borders, fills, rules.   */
+	--acsp-gold-deep: #a97912;   /* Active states, and the only gold for text. */
+	--acsp-gold-light: #f4d77e;  /* Subtle highlights.                       */
+	--acsp-gold-wash: #fdf8ea;   /* Tint of the accent, for selected rows.   */
+
+	/* --- Neutrals ---------------------------------------------------- */
+	--acsp-charcoal: #252525;    /* Headings and dark text.                  */
+	--acsp-black: #111111;       /* High contrast.                           */
+	--acsp-white: #ffffff;       /* Main surfaces.                           */
+	--acsp-bg: #f7f7f5;          /* Dashboard background.                    */
+	--acsp-muted: #667085;       /* Secondary text (4.9:1 on white).         */
+
+	/* --- Semantic surface and line ----------------------------------- */
+	/* Three levels, so a screen is not one flat field of identical boxes:
+	 * the page sits lowest, cards sit on it, and an inset panel inside a
+	 * card drops back down without needing another border. */
+	--acsp-surface: var( --acsp-white );
+	--acsp-surface-sunken: var( --acsp-bg );
+	--acsp-surface-inset: #fbfbfa;
+	--acsp-text: var( --acsp-charcoal );
+	--acsp-text-soft: var( --acsp-muted );
+	--acsp-border: #e4e4e1;      /* Hairline between surfaces.               */
+	--acsp-border-strong: #d2d2cd;
+	--acsp-border-input: #a8a8a2;
+
+	/* --- Status -------------------------------------------------------
+	 * Each status pairs a fill, a line and a text colour. Status is never
+	 * signalled by these alone: every badge and alert also carries an icon
+	 * and a word, so the meaning survives greyscale and colour blindness.
+	 */
+	--acsp-ok-bg: #e8f5ec;
+	--acsp-ok-line: #a8d8b9;
+	--acsp-ok-text: #11632d;     /* 5.6:1 on its fill. */
+
+	--acsp-warn-bg: #fdf3e2;
+	--acsp-warn-line: #e8c988;
+	--acsp-warn-text: #7a4e06;   /* 6.4:1 on its fill. */
+
+	--acsp-danger-bg: #fdeced;
+	--acsp-danger-line: #efb4b7;
+	--acsp-danger-text: #8a1a1f; /* 7.1:1 on its fill. */
+
+	--acsp-info-bg: #eef2f7;
+	--acsp-info-line: #c3cedd;
+	--acsp-info-text: #33415c;
+
+	--acsp-neutral-bg: #f1f1ef;
+	--acsp-neutral-line: #dcdcd8;
+	--acsp-neutral-text: #4a4a44;
+
+	/* --- Typography ---------------------------------------------------
+	 * The body stack is WordPress's own, so the plugin reads as part of the
+	 * dashboard rather than as a transplant. Only the scale is ours.
+	 */
+	--acsp-font: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+	--acsp-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, Monaco, "Liberation Mono", monospace;
+
+	/* One step larger than wp-admin's own scale. 13px body with 11px labels
+	 * is what makes a plugin screen read as a settings form; 14px body with
+	 * 13px supporting text is the floor for something meant to look like a
+	 * product. --acsp-text-display exists for one element per screen. */
+	--acsp-text-xs: 12px;
+	--acsp-text-sm: 13px;
+	--acsp-text-base: 14px;
+	--acsp-text-md: 15px;
+	--acsp-text-lg: 17px;
+	--acsp-text-xl: 20px;
+	--acsp-text-2xl: 24px;
+	--acsp-text-3xl: 28px;
+	--acsp-text-display: 32px;
+
+	--acsp-weight-normal: 400;
+	--acsp-weight-medium: 500;
+	--acsp-weight-semibold: 600;
+	--acsp-weight-bold: 700;
+
+	--acsp-leading-tight: 1.25;
+	--acsp-leading-snug: 1.4;
+	--acsp-leading-normal: 1.55;
+
+	/* --- Spacing scale (4px base) ------------------------------------ */
+	--acsp-space-1: 4px;
+	--acsp-space-2: 8px;
+	--acsp-space-3: 12px;
+	--acsp-space-4: 16px;
+	--acsp-space-5: 24px;
+	--acsp-space-6: 32px;
+	--acsp-space-7: 48px;
+
+	/* --- Radius ------------------------------------------------------- */
+	--acsp-radius-sm: 4px;
+	--acsp-radius-md: 6px;
+	--acsp-radius-lg: 8px;
+	--acsp-radius-pill: 999px;
+
+	/* --- Elevation ----------------------------------------------------
+	 * Two levels only. Depth is carried by the hairline borders; the shadows
+	 * exist to lift a raised surface off the page, not to decorate it.
+	 */
+	--acsp-shadow-sm: 0 1px 2px rgba( 17, 17, 17, 0.05 );
+	--acsp-shadow-md: 0 4px 16px rgba( 17, 17, 17, 0.09 );
+
+	/* --- Motion -------------------------------------------------------
+	 * One duration and one easing, so every transition in the plugin feels
+	 * like the same piece of software. Both collapse to zero under
+	 * prefers-reduced-motion, which is handled in components.css.
+	 */
+	--acsp-duration: 120ms;
+	--acsp-ease: cubic-bezier( 0.2, 0, 0.2, 1 );
+
+	/* --- Focus ---------------------------------------------------------
+	 * A single visible focus treatment used by every interactive component.
+	 * Two rings: the gold is the brand signal, the white beneath it keeps the
+	 * indicator visible when the control sits on a gold or tinted surface.
+	 */
+	--acsp-focus-ring: 0 0 0 2px var( --acsp-white ), 0 0 0 4px var( --acsp-gold-deep );
+
+	/* --- Layout ------------------------------------------------------- */
+	--acsp-measure: 68ch; /* Comfortable reading width for explanatory copy. */
+}

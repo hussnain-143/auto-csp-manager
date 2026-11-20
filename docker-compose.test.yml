@@ -1,0 +1,45 @@
+# Test environment for the integration suite: MySQL plus a PHP image with the
+# extensions and tools the WordPress test library needs.
+#
+#   docker compose -f docker-compose.test.yml run --rm php bin/ci.sh
+#
+services:
+  db:
+    image: mariadb:10.11
+    environment:
+      MARIADB_ROOT_PASSWORD: wordpress
+      MARIADB_DATABASE: wordpress_test
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    tmpfs:
+      - /var/lib/mysql
+
+  php:
+    image: acsp-test-php:8.3
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      WP_TESTS_DIR: /tmp/wordpress-tests-lib
+      WP_CORE_DIR: /tmp/wordpress/
+      DB_NAME: wordpress_test
+      DB_USER: root
+      DB_PASS: wordpress
+      DB_HOST: db
+    volumes:
+      - .:/app
+      # The WordPress test library is downloaded once and kept, so repeat runs
+      # do not re-fetch it and a bare `run` still finds it.
+      - wp-tests:/tmp/wordpress-tests-lib
+      - wp-core:/tmp/wordpress
+    working_dir: /app
+
+volumes:
+  wp-tests:
+  wp-core:

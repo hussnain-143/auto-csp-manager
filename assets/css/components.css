@@ -1,0 +1,1492 @@
+/**
+ * Auto CSP Manager — reusable components.
+ *
+ * Every selector is scoped under `.acsp-wrap` (or under the plugin's own menu
+ * id) so nothing here can reach another plugin's screens or wp-admin chrome.
+ * Each interactive component defines default, hover, focus, active and
+ * disabled states, and a loading state where one is possible.
+ *
+ * Depends on tokens.css.
+ */
+
+/* ---------------------------------------------------------------------
+ * Page shell
+ * ------------------------------------------------------------------ */
+
+.acsp-wrap {
+	margin-right: var( --acsp-space-5 );
+	font-family: var( --acsp-font );
+	font-size: var( --acsp-text-base );
+	line-height: var( --acsp-leading-normal );
+	color: var( --acsp-text );
+}
+
+.acsp-wrap *,
+.acsp-wrap *::before,
+.acsp-wrap *::after {
+	box-sizing: border-box;
+}
+
+/* The plugin's screens sit on the soft neutral so white cards read as
+ * surfaces rather than as the page itself. The tokens are declared on the
+ * body too (see tokens.css), so these resolve.
+ *
+ * #wpbody-content is left alone deliberately: painting it as well as the
+ * body gains nothing and only risks fighting an admin colour scheme. */
+body.acsp-screen,
+body.acsp-screen #wpcontent {
+	background-color: var( --acsp-bg );
+}
+
+.acsp-wrap h1,
+.acsp-wrap h2,
+.acsp-wrap h3,
+.acsp-wrap h4 {
+	margin: 0;
+	color: var( --acsp-charcoal );
+	font-weight: var( --acsp-weight-semibold );
+	line-height: var( --acsp-leading-tight );
+}
+
+.acsp-wrap h2 {
+	font-size: var( --acsp-text-lg );
+}
+
+.acsp-wrap h3 {
+	font-size: var( --acsp-text-md );
+}
+
+.acsp-wrap p {
+	margin: 0 0 var( --acsp-space-3 );
+	max-width: var( --acsp-measure );
+}
+
+.acsp-wrap p:last-child {
+	margin-bottom: 0;
+}
+
+.acsp-wrap code {
+	padding: 1px 5px;
+	border-radius: var( --acsp-radius-sm );
+	background: var( --acsp-neutral-bg );
+	font-family: var( --acsp-font-mono );
+	font-size: var( --acsp-text-sm );
+	color: var( --acsp-charcoal );
+}
+
+.acsp-wrap a {
+	color: var( --acsp-gold-deep );
+	text-decoration-thickness: 1px;
+	text-underline-offset: 2px;
+}
+
+.acsp-wrap a:hover {
+	color: var( --acsp-charcoal );
+}
+
+.acsp-wrap a:focus,
+.acsp-wrap a:focus-visible {
+	outline: 2px solid var( --acsp-gold-deep );
+	outline-offset: 2px;
+	box-shadow: none;
+	border-radius: var( --acsp-radius-sm );
+}
+
+/* Utilities. */
+.acsp-sub {
+	margin-top: var( --acsp-space-1 );
+	color: var( --acsp-text-soft );
+	font-size: var( --acsp-text-sm );
+	line-height: var( --acsp-leading-snug );
+}
+
+.acsp-break {
+	word-break: break-word;
+	overflow-wrap: anywhere;
+}
+
+.acsp-stack > * + * {
+	margin-top: var( --acsp-space-4 );
+}
+
+/* Visually hidden, still announced. Mirrors core's .screen-reader-text so the
+ * plugin does not depend on core's class staying where it is. */
+.acsp-sr-only {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	overflow: hidden;
+	clip: rect( 0 0 0 0 );
+	clip-path: inset( 50% );
+	white-space: nowrap;
+	border: 0;
+}
+
+/* ---------------------------------------------------------------------
+ * Brand header
+ * ------------------------------------------------------------------ */
+
+.acsp-masthead {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var( --acsp-space-4 );
+	padding: var( --acsp-space-5 ) 0 var( --acsp-space-4 );
+}
+
+.acsp-masthead-logo {
+	display: block;
+	width: auto;
+	height: 46px;
+}
+
+/* The wordmark carries the product name, so the heading beside it would be a
+ * duplicate. It stays in the DOM for screen readers and page structure. */
+.acsp-masthead h1 {
+	margin: 0;
+	padding: 0;
+	font-size: var( --acsp-text-xl );
+}
+
+.acsp-masthead-meta {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var( --acsp-space-2 );
+	margin-left: auto;
+}
+
+/* ---------------------------------------------------------------------
+ * Tabs (primary screen navigation)
+ * ------------------------------------------------------------------ */
+
+.acsp-tabs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var( --acsp-space-1 );
+	margin: 0 0 var( --acsp-space-5 );
+	/* The rule is what anchors the nav to the page. At --acsp-border it was
+	 * barely visible and the tabs appeared to float. */
+	border-bottom: 1px solid var( --acsp-border-strong );
+}
+
+.acsp-tab {
+	position: relative;
+	display: inline-flex;
+	align-items: center;
+	gap: var( --acsp-space-2 );
+	padding: var( --acsp-space-3 ) var( --acsp-space-4 );
+	border: 0;
+	background: none;
+	color: var( --acsp-text-soft );
+	font-size: var( --acsp-text-md );
+	font-weight: var( --acsp-weight-medium );
+	text-decoration: none;
+	transition: color var( --acsp-duration ) var( --acsp-ease );
+}
+
+.acsp-tab::after {
+	content: "";
+	position: absolute;
+	right: 0;
+	bottom: -1px;
+	left: 0;
+	height: 2px;
+	background: transparent;
+	transition: background var( --acsp-duration ) var( --acsp-ease );
+}
+
+.acsp-tab:hover {
+	color: var( --acsp-charcoal );
+}
+
+.acsp-tab:hover::after {
+	background: var( --acsp-border-strong );
+}
+
+.acsp-tab:focus-visible {
+	outline: 2px solid var( --acsp-gold-deep );
+	outline-offset: -2px;
+	border-radius: var( --acsp-radius-sm );
+	color: var( --acsp-charcoal );
+}
+
+.acsp-tab[aria-current="page"] {
+	color: var( --acsp-charcoal );
+	font-weight: var( --acsp-weight-semibold );
+}
+
+.acsp-tab[aria-current="page"]::after {
+	background: var( --acsp-gold );
+}
+
+/* ---------------------------------------------------------------------
+ * Cards
+ * ------------------------------------------------------------------ */
+
+.acsp-card {
+	padding: var( --acsp-space-5 );
+	background: var( --acsp-surface );
+	border: 1px solid var( --acsp-border );
+	border-radius: var( --acsp-radius-lg );
+	box-shadow: var( --acsp-shadow-sm );
+}
+
+.acsp-card + .acsp-card,
+.acsp-card + .acsp-alert,
+.acsp-alert + .acsp-card {
+	margin-top: var( --acsp-space-4 );
+}
+
+.acsp-card-head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: var( --acsp-space-3 );
+	margin-bottom: var( --acsp-space-4 );
+}
+
+.acsp-card-head p {
+	margin: var( --acsp-space-1 ) 0 0;
+	color: var( --acsp-text-soft );
+	font-size: var( --acsp-text-sm );
+}
+
+.acsp-card-body > * + * {
+	margin-top: var( --acsp-space-4 );
+}
+
+/* A card that reports a security-sensitive condition carries a gold edge so
+ * it is distinguishable at a glance without being tinted gold all over. */
+.acsp-card.is-accent {
+	border-left: 3px solid var( --acsp-gold );
+}
+
+/* The one card on a screen that outranks the rest. It gets room rather than
+ * decoration: more padding and a heavier top edge, so it reads as the
+ * headline surface without another colour or a deeper shadow. */
+.acsp-card.is-hero {
+	padding: var( --acsp-space-6 );
+	border-top: 2px solid var( --acsp-charcoal );
+}
+
+/* A block inside a card that should not look like another card. Dropping it
+ * onto the inset surface separates it with no extra border or shadow, which
+ * is what stops a screen turning into cards within cards. */
+.acsp-inset {
+	padding: var( --acsp-space-4 );
+	border-radius: var( --acsp-radius-md );
+	background: var( --acsp-surface-inset );
+}
+
+/* ---------------------------------------------------------------------
+ * Stat cards
+ * ------------------------------------------------------------------ */
+
+.acsp-stats {
+	display: grid;
+	grid-template-columns: repeat( auto-fit, minmax( 210px, 1fr ) );
+	gap: var( --acsp-space-4 );
+	margin: 0 0 var( --acsp-space-5 );
+	padding: 0;
+	list-style: none;
+}
+
+.acsp-stat {
+	display: flex;
+	flex-direction: column;
+	gap: var( --acsp-space-2 );
+	padding: var( --acsp-space-5 );
+	background: var( --acsp-surface );
+	border: 1px solid var( --acsp-border );
+	border-radius: var( --acsp-radius-lg );
+	box-shadow: var( --acsp-shadow-sm );
+}
+
+.acsp-stat-label {
+	color: var( --acsp-text-soft );
+	font-size: var( --acsp-text-sm );
+	font-weight: var( --acsp-weight-medium );
+}
+
+.acsp-stat-value {
+	color: var( --acsp-charcoal );
+	/* A step below the status headline on purpose. At the same size the four
+	 * counts read as four more headlines and the status stops leading. */
+	font-size: var( --acsp-text-2xl );
+	font-weight: var( --acsp-weight-semibold );
+	line-height: var( --acsp-leading-tight );
+	/* Lining figures of equal width, so four counts in a row line up and a
+	 * number changing from 9 to 10 does not shift the card. */
+	font-variant-numeric: tabular-nums;
+	letter-spacing: -0.01em;
+	overflow-wrap: anywhere;
+}
+
+/* "Last scan" holds a phrase, not a count. It keeps the slot and the weight
+ * of its neighbours but steps down in size, because setting a sentence at
+ * numeral size makes a row of statistics look broken. */
+.acsp-stat-value.is-compact {
+	font-size: var( --acsp-text-lg );
+	letter-spacing: 0;
+}
+
+.acsp-stat-foot {
+	margin-top: auto;
+	padding-top: var( --acsp-space-2 );
+	font-size: var( --acsp-text-sm );
+	color: var( --acsp-text-soft );
+}
+
+.acsp-stat-foot a {
+	font-weight: var( --acsp-weight-medium );
+}
+
+/* Draws attention to a count that needs action. The number is already the
+ * loudest thing in the card; this only tints the rule above it. */
+.acsp-stat.is-attention {
+	border-top: 2px solid var( --acsp-gold );
+}
+
+/* ---------------------------------------------------------------------
+ * Badges and status indicators
+ *
+ * A badge never relies on colour alone: `.acsp-badge-dot` renders a distinct
+ * shape per status and the label is always a word, so the meaning survives
+ * greyscale, colour blindness and a screen reader.
+ * ------------------------------------------------------------------ */
+
+.acsp-badge {
+	display: inline-flex;
+	align-items: center;
+	gap: var( --acsp-space-2 );
+	padding: 3px 10px;
+	border: 1px solid var( --acsp-neutral-line );
+	border-radius: var( --acsp-radius-pill );
+	background: var( --acsp-neutral-bg );
+	color: var( --acsp-neutral-text );
+	font-size: var( --acsp-text-sm );
+	font-weight: var( --acsp-weight-semibold );
+	line-height: 1.6;
+	white-space: nowrap;
+	vertical-align: middle;
+}
+
+.acsp-badge-dot {
+	flex: none;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: currentColor;
+}
+
+.acsp-badge.is-ok {
+	background: var( --acsp-ok-bg );
+	border-color: var( --acsp-ok-line );
+	color: var( --acsp-ok-text );
+}
+
+.acsp-badge.is-warn {
+	background: var( --acsp-warn-bg );
+	border-color: var( --acsp-warn-line );
+	color: var( --acsp-warn-text );
+}
+
+/* The warning shape is a diamond, so "report only" and "enforcing" differ by
+ * more than hue. */
+.acsp-badge.is-warn .acsp-badge-dot {
+	border-radius: 1px;
+	transform: rotate( 45deg );
+}
+
+.acsp-badge.is-danger {
+	background: var( --acsp-danger-bg );
+	border-color: var( --acsp-danger-line );
+	color: var( --acsp-danger-text );
+}
+
+.acsp-badge.is-danger .acsp-badge-dot {
+	border-radius: 1px;
+}
+
+.acsp-badge.is-info {
+	background: var( --acsp-info-bg );
+	border-color: var( --acsp-info-line );
+	color: var( --acsp-info-text );
+}
+
+/* "Off" is hollow: absence of a policy should not look like a healthy state. */
+.acsp-badge.is-neutral .acsp-badge-dot {
+	background: transparent;
+	box-shadow: inset 0 0 0 2px currentColor;
+}
+
+.acsp-count {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 20px;
+	height: 20px;
+	padding: 0 6px;
+	border-radius: var( --acsp-radius-pill );
+	background: var( --acsp-danger-text );
+	color: var( --acsp-white );
+	font-size: var( --acsp-text-xs );
+	font-weight: var( --acsp-weight-semibold );
+	line-height: 1;
+}
+
+/* ---------------------------------------------------------------------
+ * Buttons
+ * ------------------------------------------------------------------ */
+
+.acsp-wrap .acsp-btn,
+.acsp-wrap .button.acsp-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var( --acsp-space-2 );
+	min-height: 34px;
+	padding: 0 var( --acsp-space-4 );
+	border: 1px solid var( --acsp-border-strong );
+	border-radius: var( --acsp-radius-md );
+	background: var( --acsp-surface );
+	color: var( --acsp-charcoal );
+	font-family: inherit;
+	font-size: var( --acsp-text-base );
+	font-weight: var( --acsp-weight-medium );
+	line-height: 1;
+	text-decoration: none;
+	cursor: pointer;
+	box-shadow: none;
+	transition:
+		background var( --acsp-duration ) var( --acsp-ease ),
+		border-color var( --acsp-duration ) var( --acsp-ease ),
+		color var( --acsp-duration ) var( --acsp-ease );
+}
+
+.acsp-wrap .acsp-btn:hover,
+.acsp-wrap .button.acsp-btn:hover {
+	background: var( --acsp-bg );
+	border-color: var( --acsp-border-input );
+	color: var( --acsp-charcoal );
+}
+
+.acsp-wrap .acsp-btn:focus,
+.acsp-wrap .acsp-btn:focus-visible,
+.acsp-wrap .button.acsp-btn:focus {
+	outline: none;
+	border-color: var( --acsp-gold-deep );
+	box-shadow: var( --acsp-focus-ring );
+}
+
+.acsp-wrap .acsp-btn:active,
+.acsp-wrap .button.acsp-btn:active {
+	background: var( --acsp-neutral-bg );
+	transform: none;
+}
+
+.acsp-wrap .acsp-btn[disabled],
+.acsp-wrap .acsp-btn[aria-disabled="true"],
+.acsp-wrap .button.acsp-btn[disabled] {
+	opacity: 0.55;
+	cursor: not-allowed;
+	background: var( --acsp-bg );
+	color: var( --acsp-text-soft );
+	border-color: var( --acsp-border );
+}
+
+/* Primary: gold fill with charcoal text. Charcoal on #D6A72C measures about
+ * 6.4:1, well clear of AA, where white on the same gold would fail. */
+.acsp-wrap .acsp-btn-primary,
+.acsp-wrap .button.acsp-btn-primary {
+	background: var( --acsp-gold );
+	border-color: var( --acsp-gold-deep );
+	color: var( --acsp-charcoal );
+	font-weight: var( --acsp-weight-semibold );
+}
+
+.acsp-wrap .acsp-btn-primary:hover,
+.acsp-wrap .button.acsp-btn-primary:hover {
+	background: var( --acsp-gold-deep );
+	border-color: var( --acsp-gold-deep );
+	color: var( --acsp-white );
+}
+
+.acsp-wrap .acsp-btn-primary:active,
+.acsp-wrap .button.acsp-btn-primary:active {
+	background: #8f6410;
+	color: var( --acsp-white );
+}
+
+/* Destructive. Used only where the action really removes data. */
+.acsp-wrap .acsp-btn-danger,
+.acsp-wrap .button.acsp-btn-danger {
+	border-color: var( --acsp-danger-line );
+	background: var( --acsp-surface );
+	color: var( --acsp-danger-text );
+}
+
+.acsp-wrap .acsp-btn-danger:hover,
+.acsp-wrap .button.acsp-btn-danger:hover {
+	background: var( --acsp-danger-bg );
+	border-color: var( --acsp-danger-text );
+	color: var( --acsp-danger-text );
+}
+
+.acsp-wrap .acsp-btn-ghost {
+	border-color: transparent;
+	background: transparent;
+}
+
+.acsp-wrap .acsp-btn-sm {
+	min-height: 28px;
+	padding: 0 var( --acsp-space-3 );
+	font-size: var( --acsp-text-sm );
+}
+
+/* Loading state. The spinner is a border, so it needs no extra markup, and it
+ * stops turning under prefers-reduced-motion (handled at the end of file). */
+.acsp-wrap .acsp-btn.is-loading {
+	position: relative;
+	color: transparent;
+	pointer-events: none;
+}
+
+.acsp-wrap .acsp-btn.is-loading::after {
+	content: "";
+	position: absolute;
+	width: 14px;
+	height: 14px;
+	border: 2px solid currentColor;
+	border-top-color: transparent;
+	border-radius: 50%;
+	color: var( --acsp-charcoal );
+	animation: acsp-spin 700ms linear infinite;
+}
+
+@keyframes acsp-spin {
+	to {
+		transform: rotate( 360deg );
+	}
+}
+
+/* Controls WordPress renders for us — the list table's "Apply", the search
+ * submit, the pagination arrows — would otherwise sit on these screens in
+ * core's blue while everything beside them is in the plugin's own palette.
+ * They are restyled to match, scoped to the plugin's pages so core's buttons
+ * everywhere else are untouched. Only the skin changes; core keeps the
+ * markup, the behaviour and the accessible name. */
+.acsp-wrap .button:not( .acsp-btn ),
+.acsp-wrap .button-secondary:not( .acsp-btn ) {
+	min-height: 32px;
+	padding: 0 var( --acsp-space-3 );
+	border: 1px solid var( --acsp-border-strong );
+	border-radius: var( --acsp-radius-md );
+	background: var( --acsp-surface );
+	color: var( --acsp-charcoal );
+	font-size: var( --acsp-text-base );
+	font-weight: var( --acsp-weight-medium );
+	line-height: 30px;
+	box-shadow: none;
+	text-shadow: none;
+	transition:
+		background var( --acsp-duration ) var( --acsp-ease ),
+		border-color var( --acsp-duration ) var( --acsp-ease );
+}
+
+.acsp-wrap .button:not( .acsp-btn ):hover,
+.acsp-wrap .button-secondary:not( .acsp-btn ):hover {
+	background: var( --acsp-bg );
+	border-color: var( --acsp-border-input );
+	color: var( --acsp-charcoal );
+}
+
+.acsp-wrap .button:not( .acsp-btn ):focus,
+.acsp-wrap .button-secondary:not( .acsp-btn ):focus {
+	outline: none;
+	border-color: var( --acsp-gold-deep );
+	box-shadow: var( --acsp-focus-ring );
+	color: var( --acsp-charcoal );
+}
+
+.acsp-wrap .button-primary:not( .acsp-btn ) {
+	background: var( --acsp-gold );
+	border-color: var( --acsp-gold-deep );
+	color: var( --acsp-charcoal );
+	font-weight: var( --acsp-weight-semibold );
+}
+
+.acsp-wrap .button-primary:not( .acsp-btn ):hover,
+.acsp-wrap .button-primary:not( .acsp-btn ):focus {
+	background: var( --acsp-gold-deep );
+	border-color: var( --acsp-gold-deep );
+	color: var( --acsp-white );
+}
+
+.acsp-actions {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var( --acsp-space-3 );
+}
+
+.acsp-actions .acsp-inline-form {
+	display: inline-flex;
+	margin: 0;
+}
+
+/* ---------------------------------------------------------------------
+ * Alerts
+ * ------------------------------------------------------------------ */
+
+.acsp-alert {
+	display: flex;
+	align-items: flex-start;
+	gap: var( --acsp-space-3 );
+	margin: 0 0 var( --acsp-space-4 );
+	padding: var( --acsp-space-4 );
+	border: 1px solid var( --acsp-info-line );
+	border-left-width: 3px;
+	border-radius: var( --acsp-radius-md );
+	background: var( --acsp-info-bg );
+	color: var( --acsp-info-text );
+}
+
+.acsp-alert p {
+	margin: 0 0 var( --acsp-space-2 );
+	color: inherit;
+}
+
+.acsp-alert > div > *:last-child {
+	margin-bottom: 0;
+}
+
+.acsp-alert strong {
+	font-weight: var( --acsp-weight-semibold );
+}
+
+.acsp-alert code {
+	background: rgba( 17, 17, 17, 0.06 );
+	color: inherit;
+}
+
+/* The glyph is decorative: every alert also states its kind in words via the
+ * screen-reader label the template renders beside it. */
+.acsp-alert-icon {
+	flex: none;
+	width: 18px;
+	height: 18px;
+	margin-top: 1px;
+	font-size: 18px;
+	line-height: 1;
+	text-align: center;
+}
+
+.acsp-alert.is-ok {
+	background: var( --acsp-ok-bg );
+	border-color: var( --acsp-ok-line );
+	color: var( --acsp-ok-text );
+}
+
+.acsp-alert.is-warn {
+	background: var( --acsp-warn-bg );
+	border-color: var( --acsp-warn-line );
+	color: var( --acsp-warn-text );
+}
+
+.acsp-alert.is-danger {
+	background: var( --acsp-danger-bg );
+	border-color: var( --acsp-danger-line );
+	color: var( --acsp-danger-text );
+}
+
+.acsp-alert-list {
+	margin: var( --acsp-space-2 ) 0 0 var( --acsp-space-5 );
+	list-style: disc;
+}
+
+.acsp-alert-list li {
+	margin: 0 0 var( --acsp-space-1 );
+}
+
+/* ---------------------------------------------------------------------
+ * Forms
+ * ------------------------------------------------------------------ */
+
+.acsp-field {
+	margin: 0 0 var( --acsp-space-5 );
+	max-width: var( --acsp-measure );
+}
+
+.acsp-field:last-child {
+	margin-bottom: 0;
+}
+
+.acsp-label {
+	display: block;
+	margin-bottom: var( --acsp-space-1 );
+	color: var( --acsp-charcoal );
+	font-size: var( --acsp-text-md );
+	font-weight: var( --acsp-weight-semibold );
+}
+
+.acsp-help-text {
+	margin: var( --acsp-space-2 ) 0 0;
+	color: var( --acsp-text-soft );
+	font-size: var( --acsp-text-sm );
+	line-height: var( --acsp-leading-snug );
+}
+
+.acsp-wrap input[type="text"],
+.acsp-wrap input[type="url"],
+.acsp-wrap input[type="number"],
+.acsp-wrap input[type="search"],
+.acsp-wrap textarea,
+.acsp-wrap select {
+	/* Core's own width classes (.regular-text is 25em) are wider than a
+	 * phone, and a fixed width on an input is the usual cause of a settings
+	 * screen scrolling sideways. Nothing here may exceed its container. */
+	max-width: 100%;
+	min-height: 34px;
+	padding: var( --acsp-space-1 ) var( --acsp-space-3 );
+	border: 1px solid var( --acsp-border-input );
+	border-radius: var( --acsp-radius-md );
+	background-color: var( --acsp-surface );
+	color: var( --acsp-charcoal );
+	font-family: inherit;
+	font-size: var( --acsp-text-base );
+	box-shadow: none;
+	transition:
+		border-color var( --acsp-duration ) var( --acsp-ease ),
+		box-shadow var( --acsp-duration ) var( --acsp-ease );
+}
+
+.acsp-wrap input[type="text"]:hover,
+.acsp-wrap input[type="url"]:hover,
+.acsp-wrap input[type="number"]:hover,
+.acsp-wrap textarea:hover,
+.acsp-wrap select:hover {
+	border-color: var( --acsp-charcoal );
+}
+
+.acsp-wrap input[type="text"]:focus,
+.acsp-wrap input[type="url"]:focus,
+.acsp-wrap input[type="number"]:focus,
+.acsp-wrap input[type="search"]:focus,
+.acsp-wrap textarea:focus,
+.acsp-wrap select:focus {
+	outline: none;
+	border-color: var( --acsp-gold-deep );
+	box-shadow: var( --acsp-focus-ring );
+}
+
+.acsp-wrap input[disabled],
+.acsp-wrap textarea[disabled],
+.acsp-wrap select[disabled] {
+	background-color: var( --acsp-bg );
+	color: var( --acsp-text-soft );
+	border-color: var( --acsp-border );
+	cursor: not-allowed;
+}
+
+.acsp-wrap input[type="checkbox"]:focus-visible,
+.acsp-wrap input[type="radio"]:focus-visible {
+	outline: none;
+	box-shadow: var( --acsp-focus-ring );
+}
+
+.acsp-wrap input[type="checkbox"]:checked::before {
+	color: var( --acsp-gold-deep );
+}
+
+.acsp-wrap input[type="radio"]:checked::before {
+	background-color: var( --acsp-gold-deep );
+}
+
+.acsp-wrap input[type="checkbox"]:checked,
+.acsp-wrap input[type="radio"]:checked {
+	border-color: var( --acsp-gold-deep );
+}
+
+.acsp-wrap textarea.acsp-code {
+	width: 100%;
+	font-family: var( --acsp-font-mono );
+	font-size: var( --acsp-text-sm );
+	line-height: var( --acsp-leading-normal );
+	background-color: var( --acsp-bg );
+}
+
+/* Choice list: a radio or checkbox group where each option carries its own
+ * explanation. The whole row is the label, so the hit target is the card. */
+.acsp-choices {
+	display: flex;
+	flex-direction: column;
+	gap: var( --acsp-space-2 );
+	margin: 0;
+	padding: 0;
+	border: 0;
+	/* A fieldset defaults to min-inline-size: min-content, which stops it
+	 * shrinking below its widest child and makes it push the page sideways
+	 * on a narrow screen. */
+	min-inline-size: 0;
+	min-width: 0;
+}
+
+.acsp-choice {
+	display: flex;
+	align-items: flex-start;
+	gap: var( --acsp-space-3 );
+	padding: var( --acsp-space-3 ) var( --acsp-space-4 );
+	border: 1px solid var( --acsp-border );
+	border-radius: var( --acsp-radius-md );
+	background: var( --acsp-surface );
+	cursor: pointer;
+	transition:
+		border-color var( --acsp-duration ) var( --acsp-ease ),
+		background var( --acsp-duration ) var( --acsp-ease );
+}
+
+.acsp-choice:hover {
+	border-color: var( --acsp-border-input );
+	background: var( --acsp-bg );
+}
+
+.acsp-choice:focus-within {
+	border-color: var( --acsp-gold-deep );
+	box-shadow: var( --acsp-focus-ring );
+}
+
+.acsp-choice input {
+	flex: none;
+	margin: 2px 0 0;
+}
+
+.acsp-choice-body {
+	min-width: 0;
+}
+
+.acsp-choice-title {
+	display: block;
+	color: var( --acsp-charcoal );
+	font-size: var( --acsp-text-md );
+	font-weight: var( --acsp-weight-semibold );
+}
+
+.acsp-choice-desc {
+	display: block;
+	margin-top: 2px;
+	color: var( --acsp-text-soft );
+	font-size: var( --acsp-text-sm );
+	line-height: var( --acsp-leading-snug );
+}
+
+/* :has() is progressive enhancement only — without it the selected option is
+ * still identified by the radio itself and by the accessibility tree. */
+.acsp-choice:has( input:checked ) {
+	border-color: var( --acsp-gold );
+	background: var( --acsp-gold-wash );
+}
+
+/* A row that states a fact rather than offering a choice. It is not a
+ * disabled control, because a disabled checkbox draws as an empty box and
+ * reads as "off" even when the text beside it says the opposite. */
+.acsp-choice.is-fixed {
+	background: var( --acsp-bg );
+	cursor: default;
+}
+
+.acsp-choice.is-fixed:hover {
+	border-color: var( --acsp-border );
+}
+
+.acsp-choice-mark {
+	flex: none;
+	width: 16px;
+	margin-top: 1px;
+	color: var( --acsp-ok-text );
+	font-weight: var( --acsp-weight-bold );
+	text-align: center;
+}
+
+/* A setting that weakens security or destroys data. Marked by an edge and a
+ * word in the template, never by colour on its own. */
+.acsp-field.is-sensitive {
+	padding-left: var( --acsp-space-4 );
+	border-left: 3px solid var( --acsp-warn-line );
+}
+
+/* ---------------------------------------------------------------------
+ * Source chips (policy editor)
+ * ------------------------------------------------------------------ */
+
+.acsp-chips {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var( --acsp-space-2 );
+	min-height: 36px;
+	padding: var( --acsp-space-2 );
+	border: 1px solid var( --acsp-border-input );
+	border-radius: var( --acsp-radius-md );
+	background: var( --acsp-surface );
+	cursor: text;
+	transition:
+		border-color var( --acsp-duration ) var( --acsp-ease ),
+		box-shadow var( --acsp-duration ) var( --acsp-ease );
+}
+
+.acsp-chips:focus-within {
+	border-color: var( --acsp-gold-deep );
+	box-shadow: var( --acsp-focus-ring );
+}
+
+.acsp-chip {
+	display: inline-flex;
+	align-items: center;
+	gap: var( --acsp-space-1 );
+	padding: 2px 2px 2px var( --acsp-space-2 );
+	border: 1px solid var( --acsp-border-strong );
+	border-radius: var( --acsp-radius-sm );
+	background: var( --acsp-bg );
+	color: var( --acsp-charcoal );
+	font-family: var( --acsp-font-mono );
+	font-size: var( --acsp-text-sm );
+	line-height: 1.8;
+	word-break: break-all;
+}
+
+.acsp-chip.is-keyword {
+	background: var( --acsp-info-bg );
+	border-color: var( --acsp-info-line );
+	color: var( --acsp-info-text );
+}
+
+/* A risky source gets a border, a tint *and* a warning glyph, so it is not
+ * identified by colour alone. */
+.acsp-chip.is-risky {
+	background: var( --acsp-warn-bg );
+	border-color: var( --acsp-gold );
+	color: var( --acsp-warn-text );
+}
+
+.acsp-chip.is-risky::before {
+	content: "\26A0";
+	margin-right: 2px;
+	font-family: var( --acsp-font );
+}
+
+.acsp-chip button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 20px;
+	height: 20px;
+	padding: 0;
+	border: 0;
+	border-radius: var( --acsp-radius-sm );
+	background: none;
+	color: var( --acsp-text-soft );
+	font-size: 15px;
+	line-height: 1;
+	cursor: pointer;
+	transition:
+		background var( --acsp-duration ) var( --acsp-ease ),
+		color var( --acsp-duration ) var( --acsp-ease );
+}
+
+.acsp-chip button:hover {
+	background: var( --acsp-danger-bg );
+	color: var( --acsp-danger-text );
+}
+
+.acsp-chip button:focus-visible {
+	outline: none;
+	color: var( --acsp-danger-text );
+	box-shadow: var( --acsp-focus-ring );
+}
+
+.acsp-chips input {
+	flex: 1 1 200px;
+	min-width: 160px;
+	min-height: 26px;
+	padding: 0 var( --acsp-space-1 );
+	border: 0;
+	background: transparent;
+	font-family: var( --acsp-font-mono );
+	font-size: var( --acsp-text-sm );
+	box-shadow: none;
+}
+
+.acsp-wrap .acsp-chips input:focus {
+	outline: none;
+	border: 0;
+	box-shadow: none;
+}
+
+/* ---------------------------------------------------------------------
+ * Tables
+ * ------------------------------------------------------------------ */
+
+.acsp-table-wrap {
+	overflow-x: auto;
+	border: 1px solid var( --acsp-border );
+	border-radius: var( --acsp-radius-lg );
+	background: var( --acsp-surface );
+	box-shadow: var( --acsp-shadow-sm );
+}
+
+.acsp-wrap .acsp-table {
+	width: 100%;
+	border: 0;
+	border-collapse: collapse;
+	box-shadow: none;
+	background: transparent;
+}
+
+.acsp-wrap .acsp-table thead th,
+.acsp-wrap .acsp-table thead td {
+	padding: var( --acsp-space-3 ) var( --acsp-space-4 );
+	border-bottom: 1px solid var( --acsp-border );
+	background: var( --acsp-bg );
+	color: var( --acsp-text-soft );
+	font-size: var( --acsp-text-sm );
+	font-weight: var( --acsp-weight-semibold );
+	text-align: left;
+	white-space: nowrap;
+}
+
+.acsp-wrap .acsp-table tbody th,
+.acsp-wrap .acsp-table tbody td {
+	padding: var( --acsp-space-4 );
+	border-bottom: 1px solid var( --acsp-border );
+	vertical-align: top;
+	font-size: var( --acsp-text-base );
+}
+
+.acsp-wrap .acsp-table tbody tr:last-child th,
+.acsp-wrap .acsp-table tbody tr:last-child td {
+	border-bottom: 0;
+}
+
+.acsp-wrap .acsp-table tbody tr:hover {
+	background: var( --acsp-bg );
+}
+
+.acsp-wrap .acsp-table .check-column {
+	width: 40px;
+	padding-right: 0;
+	white-space: nowrap;
+}
+
+/* The WordPress list table on the Reports screen. Core's own classes are kept
+ * so its pagination, sorting and bulk actions keep working; only the skin
+ * changes. */
+.acsp-wrap .wp-list-table {
+	border: 1px solid var( --acsp-border );
+	border-radius: var( --acsp-radius-lg );
+	border-collapse: separate;
+	border-spacing: 0;
+	overflow: hidden;
+	box-shadow: var( --acsp-shadow-sm );
+}
+
+.acsp-wrap .wp-list-table thead th,
+.acsp-wrap .wp-list-table thead td,
+.acsp-wrap .wp-list-table tfoot th,
+.acsp-wrap .wp-list-table tfoot td {
+	padding: var( --acsp-space-3 ) var( --acsp-space-4 );
+	background: var( --acsp-bg );
+	border-bottom: 1px solid var( --acsp-border );
+	color: var( --acsp-text-soft );
+	font-size: var( --acsp-text-sm );
+	font-weight: var( --acsp-weight-semibold );
+}
+
+.acsp-wrap .wp-list-table tfoot th,
+.acsp-wrap .wp-list-table tfoot td {
+	border-top: 1px solid var( --acsp-border );
+	border-bottom: 0;
+}
+
+.acsp-wrap .wp-list-table thead th a,
+.acsp-wrap .wp-list-table tfoot th a {
+	color: var( --acsp-text-soft );
+}
+
+.acsp-wrap .wp-list-table thead th a:hover {
+	color: var( --acsp-charcoal );
+}
+
+.acsp-wrap .wp-list-table tbody td,
+.acsp-wrap .wp-list-table tbody th {
+	padding: var( --acsp-space-4 );
+	border-bottom: 1px solid var( --acsp-border );
+	vertical-align: top;
+	font-size: var( --acsp-text-base );
+	line-height: var( --acsp-leading-snug );
+}
+
+.acsp-wrap .wp-list-table.striped > tbody > :nth-child(odd) {
+	background: transparent;
+}
+
+.acsp-wrap .wp-list-table tbody tr:hover {
+	background: var( --acsp-bg );
+}
+
+.acsp-wrap .wp-list-table tbody tr:last-child td,
+.acsp-wrap .wp-list-table tbody tr:last-child th {
+	border-bottom: 0;
+}
+
+/* Row actions are always visible on this screen (the table asks for that),
+ * so they are styled as a real control strip rather than hover text. */
+.acsp-wrap .row-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var( --acsp-space-1 ) var( --acsp-space-3 );
+	position: static;
+	left: auto;
+	margin-top: var( --acsp-space-3 );
+	padding: 0;
+	color: var( --acsp-border-strong );
+	font-size: var( --acsp-text-sm );
+}
+
+.acsp-wrap .row-actions span {
+	padding: 0;
+}
+
+.acsp-wrap .row-actions span::after {
+	content: none;
+}
+
+.acsp-wrap .row-actions a {
+	display: inline-block;
+	padding: 2px 0;
+	font-weight: var( --acsp-weight-medium );
+	text-decoration: none;
+	border-bottom: 1px solid transparent;
+}
+
+.acsp-wrap .row-actions a:hover {
+	border-bottom-color: currentColor;
+}
+
+.acsp-wrap .row-actions .acsp-allow a {
+	color: var( --acsp-ok-text );
+}
+
+.acsp-wrap .row-actions .acsp-block a,
+.acsp-wrap .row-actions .acsp-delete a {
+	color: var( --acsp-danger-text );
+}
+
+.acsp-wrap .row-actions .acsp-ignore a,
+.acsp-wrap .row-actions .acsp-reset a {
+	color: var( --acsp-text-soft );
+}
+
+/* Status filter links above the table. */
+.acsp-wrap .subsubsub {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var( --acsp-space-1 );
+	float: none;
+	margin: 0 0 var( --acsp-space-4 );
+	padding: 0;
+	font-size: var( --acsp-text-base );
+}
+
+.acsp-wrap .subsubsub li {
+	margin: 0;
+	color: transparent; /* Hides core's "|" separators. */
+}
+
+.acsp-wrap .subsubsub a {
+	display: inline-block;
+	padding: var( --acsp-space-1 ) var( --acsp-space-3 );
+	border: 1px solid transparent;
+	border-radius: var( --acsp-radius-pill );
+	color: var( --acsp-text-soft );
+	font-weight: var( --acsp-weight-medium );
+	text-decoration: none;
+	transition:
+		background var( --acsp-duration ) var( --acsp-ease ),
+		color var( --acsp-duration ) var( --acsp-ease );
+}
+
+.acsp-wrap .subsubsub a:hover {
+	background: var( --acsp-neutral-bg );
+	color: var( --acsp-charcoal );
+}
+
+.acsp-wrap .subsubsub a.current {
+	background: var( --acsp-gold-wash );
+	border-color: var( --acsp-gold );
+	color: var( --acsp-charcoal );
+	font-weight: var( --acsp-weight-semibold );
+}
+
+.acsp-wrap .subsubsub .count {
+	color: inherit;
+	opacity: 0.75;
+}
+
+.acsp-wrap .tablenav {
+	height: auto;
+	margin: var( --acsp-space-3 ) 0;
+}
+
+.acsp-wrap .tablenav .tablenav-pages {
+	float: none;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: flex-end;
+	gap: var( --acsp-space-2 );
+	margin: 0;
+	font-size: var( --acsp-text-sm );
+	color: var( --acsp-text-soft );
+}
+
+.acsp-wrap .tablenav-pages .button,
+.acsp-wrap .tablenav-pages .tablenav-pages-navspan {
+	min-width: 32px;
+	height: 32px;
+	border-radius: var( --acsp-radius-md );
+	border-color: var( --acsp-border-strong );
+	background: var( --acsp-surface );
+	color: var( --acsp-charcoal );
+	line-height: 30px;
+}
+
+.acsp-wrap .tablenav-pages .button:hover {
+	background: var( --acsp-bg );
+	border-color: var( --acsp-border-input );
+}
+
+/* ---------------------------------------------------------------------
+ * Empty states
+ * ------------------------------------------------------------------ */
+
+.acsp-empty {
+	padding: var( --acsp-space-7 ) var( --acsp-space-5 );
+	text-align: center;
+}
+
+.acsp-empty-mark {
+	width: 44px;
+	height: 44px;
+	margin: 0 auto var( --acsp-space-4 );
+	opacity: 0.4;
+}
+
+.acsp-empty-title {
+	margin: 0 0 var( --acsp-space-2 );
+	color: var( --acsp-charcoal );
+	font-size: var( --acsp-text-lg );
+	font-weight: var( --acsp-weight-semibold );
+}
+
+.acsp-empty p {
+	max-width: 46ch;
+	margin: 0 auto var( --acsp-space-4 );
+	color: var( --acsp-text-soft );
+}
+
+.acsp-empty .acsp-actions {
+	justify-content: center;
+}
+
+/* ---------------------------------------------------------------------
+ * Loading skeleton
+ * ------------------------------------------------------------------ */
+
+.acsp-skeleton {
+	height: 12px;
+	border-radius: var( --acsp-radius-sm );
+	background: linear-gradient( 90deg, var( --acsp-neutral-bg ) 25%, var( --acsp-bg ) 37%, var( --acsp-neutral-bg ) 63% );
+	background-size: 400% 100%;
+	animation: acsp-shimmer 1.4s ease infinite;
+}
+
+.acsp-skeleton + .acsp-skeleton {
+	margin-top: var( --acsp-space-2 );
+}
+
+.acsp-skeleton.is-wide {
+	width: 100%;
+}
+
+.acsp-skeleton.is-half {
+	width: 50%;
+}
+
+@keyframes acsp-shimmer {
+	0% {
+		background-position: 100% 50%;
+	}
+
+	100% {
+		background-position: 0 50%;
+	}
+}
+
+/* ---------------------------------------------------------------------
+ * Progress
+ * ------------------------------------------------------------------ */
+
+.acsp-progress {
+	height: 6px;
+	overflow: hidden;
+	border-radius: var( --acsp-radius-pill );
+	background: var( --acsp-neutral-bg );
+}
+
+.acsp-progress-bar {
+	width: 0;
+	height: 100%;
+	border-radius: inherit;
+	background: var( --acsp-gold );
+	transition: width 240ms var( --acsp-ease );
+}
+
+.acsp-progress.is-done .acsp-progress-bar {
+	background: var( --acsp-ok-text );
+}
+
+.acsp-progress.is-error .acsp-progress-bar {
+	background: var( --acsp-danger-text );
+}
+
+/* ---------------------------------------------------------------------
+ * Tooltip / hint
+ *
+ * A hint is supplementary only. Anything a user must read to make a decision
+ * is rendered as visible help text, never hidden behind a hover.
+ * ------------------------------------------------------------------ */
+
+.acsp-hint {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 16px;
+	height: 16px;
+	border: 1px solid var( --acsp-border-strong );
+	border-radius: 50%;
+	background: var( --acsp-surface );
+	color: var( --acsp-text-soft );
+	font-size: 10px;
+	font-weight: var( --acsp-weight-bold );
+	line-height: 1;
+	cursor: help;
+	vertical-align: middle;
+}
+
+.acsp-hint:hover,
+.acsp-hint:focus-visible {
+	border-color: var( --acsp-gold-deep );
+	color: var( --acsp-gold-deep );
+	outline: none;
+}
+
+/* ---------------------------------------------------------------------
+ * Modal (confirmation dialog)
+ *
+ * Rendered by <dialog>, so the browser supplies the focus trap, the Escape
+ * key and the inert backdrop. Where <dialog> is unsupported the script falls
+ * back to window.confirm(), so a destructive action is never unguarded.
+ * ------------------------------------------------------------------ */
+
+.acsp-dialog {
+	width: min( 460px, calc( 100vw - 32px ) );
+	padding: 0;
+	border: 1px solid var( --acsp-border );
+	border-radius: var( --acsp-radius-lg );
+	background: var( --acsp-surface );
+	color: var( --acsp-text );
+	box-shadow: var( --acsp-shadow-md );
+}
+
+.acsp-dialog::backdrop {
+	background: rgba( 17, 17, 17, 0.4 );
+}
+
+.acsp-dialog-body {
+	padding: var( --acsp-space-5 );
+}
+
+.acsp-dialog h2 {
+	margin: 0 0 var( --acsp-space-2 );
+	font-size: var( --acsp-text-lg );
+}
+
+.acsp-dialog p {
+	margin: 0;
+	color: var( --acsp-text-soft );
+}
+
+.acsp-dialog-foot {
+	display: flex;
+	justify-content: flex-end;
+	gap: var( --acsp-space-3 );
+	padding: var( --acsp-space-4 ) var( --acsp-space-5 );
+	border-top: 1px solid var( --acsp-border );
+	background: var( --acsp-bg );
+	border-radius: 0 0 var( --acsp-radius-lg ) var( --acsp-radius-lg );
+}
+
+/* ---------------------------------------------------------------------
+ * Reduced motion
+ *
+ * Every animation in the plugin is decorative or a progress hint, and each
+ * one has a static resting state that still conveys the same information.
+ * ------------------------------------------------------------------ */
+
+@media ( prefers-reduced-motion: reduce ) {
+	.acsp-wrap *,
+	.acsp-wrap *::before,
+	.acsp-wrap *::after,
+	.acsp-dialog,
+	.acsp-dialog * {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+
+	.acsp-skeleton {
+		background: var( --acsp-neutral-bg );
+	}
+
+	.acsp-wrap .acsp-btn.is-loading::after {
+		border-top-color: currentColor;
+		opacity: 0.5;
+	}
+}
+
+/* ---------------------------------------------------------------------
+ * Forced colours / high contrast
+ * ------------------------------------------------------------------ */
+
+@media ( forced-colors: active ) {
+	.acsp-card,
+	.acsp-stat,
+	.acsp-alert,
+	.acsp-badge,
+	.acsp-chips,
+	.acsp-table-wrap {
+		border: 1px solid CanvasText;
+	}
+
+	.acsp-tab[aria-current="page"]::after {
+		background: Highlight;
+	}
+
+	.acsp-progress-bar {
+		background: Highlight;
+	}
+}

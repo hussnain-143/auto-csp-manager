@@ -1,0 +1,703 @@
+/**
+ * Auto CSP Manager — per-screen layout.
+ *
+ * Components live in components.css; this file only places them. Everything
+ * is scoped under `.acsp-wrap`.
+ *
+ * Depends on tokens.css and components.css.
+ */
+
+/* ---------------------------------------------------------------------
+ * Dashboard
+ * ------------------------------------------------------------------ */
+
+.acsp-columns {
+	display: grid;
+	grid-template-columns: minmax( 0, 2fr ) minmax( 260px, 1fr );
+	gap: var( --acsp-space-4 );
+	align-items: start;
+}
+
+.acsp-columns > * {
+	min-width: 0;
+}
+
+/* Four counts sit in one row under the status panel. They are a summary,
+ * not four separate cards competing with it. */
+.acsp-columns .acsp-stats {
+	grid-template-columns: repeat( 4, minmax( 0, 1fr ) );
+	margin: var( --acsp-space-4 ) 0 0;
+}
+
+/* The status panel is the single most important thing on the screen, so it
+ * gets the only display-sized type on the page. Everything else steps down
+ * from it rather than matching it. */
+.acsp-status-panel .acsp-status-mode {
+	margin-bottom: var( --acsp-space-3 );
+}
+
+/* A quiet label above the headline. It names what the panel is reporting,
+ * which lets the mode badge live once in the masthead instead of being
+ * repeated here. */
+.acsp-status-eyebrow {
+	display: block;
+	margin-bottom: var( --acsp-space-2 );
+	color: var( --acsp-text-soft );
+	font-size: var( --acsp-text-xs );
+	font-weight: var( --acsp-weight-semibold );
+	text-transform: uppercase;
+	letter-spacing: 0.08em;
+}
+
+.acsp-status-headline {
+	margin: 0;
+	color: var( --acsp-charcoal );
+	font-size: var( --acsp-text-display );
+	font-weight: var( --acsp-weight-semibold );
+	line-height: 1.15;
+	letter-spacing: -0.02em;
+}
+
+.acsp-status-panel .acsp-status-detail {
+	max-width: 56ch;
+	margin: var( --acsp-space-3 ) 0 0;
+	color: var( --acsp-text-soft );
+	font-size: var( --acsp-text-md );
+	line-height: var( --acsp-leading-normal );
+}
+
+/* The facts under the headline sit on the inset surface so they read as
+ * supporting detail, without becoming a card inside a card. */
+.acsp-status-panel .acsp-definition {
+	margin-top: var( --acsp-space-5 );
+}
+
+.acsp-definition {
+	display: grid;
+	grid-template-columns: max-content minmax( 0, 1fr );
+	gap: var( --acsp-space-2 ) var( --acsp-space-4 );
+	margin: 0;
+	font-size: var( --acsp-text-base );
+}
+
+.acsp-definition dt {
+	color: var( --acsp-text-soft );
+}
+
+.acsp-definition dd {
+	margin: 0;
+	color: var( --acsp-charcoal );
+	overflow-wrap: anywhere;
+}
+
+/* Quick actions sit in the narrow column as a vertical list. The first is
+ * the one a user most often wants and is the only filled button on the
+ * screen; the rest are plainly secondary rather than four equal choices. */
+.acsp-quick-actions {
+	display: flex;
+	flex-direction: column;
+	gap: var( --acsp-space-2 );
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.acsp-quick-actions .acsp-btn {
+	width: 100%;
+	justify-content: flex-start;
+	min-height: 40px;
+}
+
+/* Secondary actions drop their border and sit on the inset surface, so the
+ * primary is the only thing in the column with an outline. */
+.acsp-quick-actions .acsp-btn:not( .acsp-btn-primary ) {
+	border-color: transparent;
+	background: var( --acsp-surface-inset );
+	color: var( --acsp-charcoal );
+}
+
+.acsp-quick-actions .acsp-btn:not( .acsp-btn-primary ):hover {
+	background: var( --acsp-bg );
+	border-color: var( --acsp-border-strong );
+}
+
+/* The three steps are supporting guidance, so they are numbered compactly
+ * in the side column rather than filling the width of the screen. */
+.acsp-steps {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	counter-reset: acsp-step;
+}
+
+.acsp-steps li {
+	position: relative;
+	margin: 0 0 var( --acsp-space-3 );
+	padding-left: var( --acsp-space-6 );
+	color: var( --acsp-text-soft );
+	font-size: var( --acsp-text-sm );
+	line-height: var( --acsp-leading-snug );
+	counter-increment: acsp-step;
+}
+
+.acsp-steps li:last-child {
+	margin-bottom: 0;
+}
+
+.acsp-steps li::before {
+	content: counter( acsp-step );
+	position: absolute;
+	top: 0;
+	left: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 22px;
+	height: 22px;
+	border-radius: 50%;
+	background: var( --acsp-gold-wash );
+	color: var( --acsp-gold-deep );
+	font-size: var( --acsp-text-xs );
+	font-weight: var( --acsp-weight-bold );
+	font-variant-numeric: tabular-nums;
+}
+
+/* The side column stacks its own cards. Quick actions first, because that
+ * is what the column is for; the walkthrough sits beneath it and fills the
+ * space the column used to leave empty. */
+.acsp-side {
+	display: flex;
+	flex-direction: column;
+	gap: var( --acsp-space-4 );
+}
+
+/* The live header preview is reference material, not a control, so it is
+ * collapsed by default behind a native disclosure. */
+.acsp-disclosure {
+	border: 1px solid var( --acsp-border );
+	border-radius: var( --acsp-radius-lg );
+	background: var( --acsp-surface );
+	box-shadow: var( --acsp-shadow-sm );
+}
+
+.acsp-disclosure > summary {
+	padding: var( --acsp-space-4 ) var( --acsp-space-5 );
+	color: var( --acsp-charcoal );
+	font-size: var( --acsp-text-md );
+	font-weight: var( --acsp-weight-semibold );
+	cursor: pointer;
+	list-style-position: inside;
+}
+
+.acsp-disclosure > summary:focus-visible {
+	outline: none;
+	border-radius: var( --acsp-radius-lg );
+	box-shadow: var( --acsp-focus-ring );
+}
+
+.acsp-disclosure[open] > summary {
+	border-bottom: 1px solid var( --acsp-border );
+}
+
+.acsp-disclosure-body {
+	padding: var( --acsp-space-5 );
+}
+
+/* ---------------------------------------------------------------------
+ * Settings
+ * ------------------------------------------------------------------ */
+
+.acsp-settings-form {
+	max-width: 860px;
+}
+
+.acsp-form-foot {
+	position: sticky;
+	bottom: 0;
+	z-index: 1;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var( --acsp-space-3 );
+	margin-top: var( --acsp-space-5 );
+	padding: var( --acsp-space-3 ) var( --acsp-space-4 );
+	border: 1px solid var( --acsp-border );
+	border-radius: var( --acsp-radius-lg );
+	background: var( --acsp-surface );
+	box-shadow: var( --acsp-shadow-md );
+}
+
+.acsp-form-foot p {
+	margin: 0;
+	color: var( --acsp-text-soft );
+	font-size: var( --acsp-text-sm );
+}
+
+/* ---------------------------------------------------------------------
+ * Policy editor
+ * ------------------------------------------------------------------ */
+
+.acsp-directive-group + .acsp-directive-group {
+	margin-top: var( --acsp-space-5 );
+}
+
+.acsp-directive-group-head {
+	margin-bottom: var( --acsp-space-3 );
+}
+
+.acsp-directive-group-head h2 {
+	display: flex;
+	align-items: center;
+	gap: var( --acsp-space-2 );
+}
+
+.acsp-directive-group-head p {
+	margin: var( --acsp-space-1 ) 0 0;
+	color: var( --acsp-text-soft );
+	font-size: var( --acsp-text-sm );
+}
+
+.acsp-directive {
+	display: grid;
+	grid-template-columns: minmax( 200px, 260px ) minmax( 0, 1fr );
+	gap: var( --acsp-space-4 );
+	padding: var( --acsp-space-4 ) 0;
+	border-bottom: 1px solid var( --acsp-border );
+}
+
+.acsp-directive:last-child {
+	border-bottom: 0;
+	padding-bottom: 0;
+}
+
+.acsp-directive-name {
+	display: block;
+	color: var( --acsp-charcoal );
+	font-size: var( --acsp-text-md );
+	font-weight: var( --acsp-weight-semibold );
+}
+
+.acsp-directive-key {
+	display: inline-block;
+	margin-top: var( --acsp-space-1 );
+	font-size: var( --acsp-text-xs );
+}
+
+.acsp-directive-desc {
+	margin: var( --acsp-space-2 ) 0 0;
+	color: var( --acsp-text-soft );
+	font-size: var( --acsp-text-sm );
+	line-height: var( --acsp-leading-snug );
+}
+
+.acsp-directive-notes {
+	margin: var( --acsp-space-2 ) 0 0;
+	padding: 0;
+	list-style: none;
+}
+
+.acsp-directive-notes li {
+	margin-top: var( --acsp-space-1 );
+	font-size: var( --acsp-text-sm );
+	line-height: var( --acsp-leading-snug );
+}
+
+.acsp-note-risky {
+	color: var( --acsp-warn-text );
+}
+
+.acsp-note-empty {
+	color: var( --acsp-text-soft );
+}
+
+/* Reference panel of accepted source syntax. */
+.acsp-syntax {
+	display: grid;
+	grid-template-columns: repeat( auto-fit, minmax( 280px, 1fr ) );
+	gap: var( --acsp-space-2 ) var( --acsp-space-5 );
+	margin: 0;
+}
+
+.acsp-syntax div {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: var( --acsp-space-2 );
+	font-size: var( --acsp-text-sm );
+}
+
+.acsp-syntax dt {
+	flex: none;
+}
+
+.acsp-syntax dd {
+	flex: 1 1 140px;
+	margin: 0;
+	color: var( --acsp-text-soft );
+}
+
+/* ---------------------------------------------------------------------
+ * Scanner
+ * ------------------------------------------------------------------ */
+
+.acsp-scan-panel .acsp-actions {
+	margin-top: var( --acsp-space-4 );
+}
+
+.acsp-scan-progress {
+	margin-top: var( --acsp-space-4 );
+}
+
+.acsp-scan-progress-head {
+	display: flex;
+	align-items: baseline;
+	justify-content: space-between;
+	gap: var( --acsp-space-3 );
+	margin-bottom: var( --acsp-space-2 );
+	font-size: var( --acsp-text-sm );
+}
+
+.acsp-scan-phase {
+	color: var( --acsp-charcoal );
+	font-weight: var( --acsp-weight-semibold );
+}
+
+.acsp-scan-percent {
+	color: var( --acsp-text-soft );
+	font-variant-numeric: tabular-nums;
+}
+
+.acsp-scan-log {
+	margin: var( --acsp-space-4 ) 0 0;
+	padding: var( --acsp-space-3 ) 0 0;
+	border-top: 1px solid var( --acsp-border );
+	list-style: none;
+	font-size: var( --acsp-text-sm );
+}
+
+.acsp-scan-log li {
+	position: relative;
+	margin: 0;
+	padding: var( --acsp-space-1 ) 0 var( --acsp-space-1 ) var( --acsp-space-5 );
+	color: var( --acsp-text-soft );
+	overflow-wrap: anywhere;
+}
+
+.acsp-scan-log li::before {
+	content: "\2713";
+	position: absolute;
+	left: 0;
+	color: var( --acsp-ok-text );
+	font-weight: var( --acsp-weight-bold );
+}
+
+.acsp-scan-log li.is-active {
+	color: var( --acsp-charcoal );
+	font-weight: var( --acsp-weight-medium );
+}
+
+.acsp-scan-log li.is-active::before {
+	content: "\2026";
+	color: var( --acsp-gold-deep );
+}
+
+.acsp-scan-log li.is-error {
+	color: var( --acsp-danger-text );
+}
+
+.acsp-scan-log li.is-error::before {
+	content: "\2715";
+	color: var( --acsp-danger-text );
+}
+
+.acsp-scan-summary {
+	display: grid;
+	grid-template-columns: repeat( auto-fit, minmax( 130px, 1fr ) );
+	gap: var( --acsp-space-4 );
+	margin: 0;
+}
+
+.acsp-scan-summary div {
+	padding: var( --acsp-space-3 ) 0;
+	border-top: 2px solid var( --acsp-border );
+}
+
+.acsp-scan-summary dt {
+	color: var( --acsp-text-soft );
+	font-size: var( --acsp-text-sm );
+}
+
+.acsp-scan-summary dd {
+	margin: var( --acsp-space-1 ) 0 0;
+	color: var( --acsp-charcoal );
+	font-size: var( --acsp-text-xl );
+	font-weight: var( --acsp-weight-semibold );
+	font-variant-numeric: tabular-nums;
+}
+
+.acsp-diff-source {
+	font-family: var( --acsp-font-mono );
+	font-size: var( --acsp-text-sm );
+	overflow-wrap: anywhere;
+}
+
+.acsp-where {
+	color: var( --acsp-text-soft );
+	font-size: var( --acsp-text-sm );
+}
+
+/* ---------------------------------------------------------------------
+ * Reports
+ * ------------------------------------------------------------------ */
+
+.acsp-reports-toolbar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: var( --acsp-space-3 );
+	margin-bottom: var( --acsp-space-3 );
+}
+
+.acsp-wrap .search-box {
+	float: none;
+	display: flex;
+	gap: var( --acsp-space-2 );
+	margin: 0;
+}
+
+.acsp-wrap .search-box input[type="search"] {
+	min-width: 220px;
+}
+
+.acsp-source {
+	font-family: var( --acsp-font-mono );
+	font-size: var( --acsp-text-base );
+	font-weight: var( --acsp-weight-semibold );
+	overflow-wrap: anywhere;
+}
+
+/* The status badge must never be clipped: it is how the decision on a row is
+ * read. Its column is sized for the longest label, and the other fixed
+ * columns are kept narrow enough that the table still fits its container. */
+.acsp-wrap .column-status {
+	width: 144px;
+}
+
+.acsp-wrap .column-last_seen {
+	width: 112px;
+}
+
+.acsp-wrap .column-hits {
+	width: 78px;
+	font-variant-numeric: tabular-nums;
+}
+
+.acsp-wrap .column-directive {
+	width: 136px;
+}
+
+.acsp-wrap .column-page {
+	width: 11%;
+}
+
+/* Conflict resolution panel. */
+.acsp-conflict-item + .acsp-conflict-item {
+	margin-top: var( --acsp-space-5 );
+	padding-top: var( --acsp-space-5 );
+	border-top: 1px solid var( --acsp-border );
+}
+
+.acsp-conflict-item .acsp-table-wrap {
+	margin: var( --acsp-space-3 ) 0;
+	max-width: 46em;
+	box-shadow: none;
+}
+
+.acsp-conflict-head code {
+	margin-right: var( --acsp-space-1 );
+}
+
+/* ---------------------------------------------------------------------
+ * Responsive
+ *
+ * 1280 — the two-column dashboard loses its sidebar.
+ *  960 — directive rows stack; the sticky save bar goes full width.
+ *  782 — wp-admin's own mobile breakpoint: tables become stacked cards.
+ *  600 — single-column everything.
+ * ------------------------------------------------------------------ */
+
+@media screen and ( max-width: 1280px ) {
+	.acsp-columns {
+		grid-template-columns: minmax( 0, 1fr );
+	}
+}
+
+@media screen and ( max-width: 960px ) {
+	.acsp-wrap {
+		margin-right: var( --acsp-space-3 );
+	}
+
+	/* Four counts across stop being readable once the columns have
+	 * collapsed and the cards are full width. */
+	.acsp-columns .acsp-stats {
+		grid-template-columns: repeat( 2, minmax( 0, 1fr ) );
+	}
+
+	.acsp-card.is-hero {
+		padding: var( --acsp-space-5 );
+	}
+
+	.acsp-status-headline {
+		font-size: var( --acsp-text-3xl );
+	}
+
+	.acsp-directive {
+		grid-template-columns: minmax( 0, 1fr );
+		gap: var( --acsp-space-2 );
+	}
+
+	.acsp-masthead-meta {
+		margin-left: 0;
+		width: 100%;
+	}
+}
+
+@media screen and ( max-width: 782px ) {
+	.acsp-masthead {
+		gap: var( --acsp-space-3 );
+	}
+
+	.acsp-masthead-logo {
+		height: 28px;
+	}
+
+	.acsp-tabs {
+		gap: 0;
+		overflow-x: auto;
+		flex-wrap: nowrap;
+		scrollbar-width: thin;
+	}
+
+	.acsp-tab {
+		white-space: nowrap;
+	}
+
+	.acsp-card,
+	.acsp-stat {
+		padding: var( --acsp-space-4 );
+	}
+
+	.acsp-status-headline {
+		font-size: var( --acsp-text-2xl );
+	}
+
+	.acsp-definition {
+		grid-template-columns: minmax( 0, 1fr );
+		gap: 0;
+	}
+
+	.acsp-definition dt {
+		margin-top: var( --acsp-space-3 );
+		font-size: var( --acsp-text-sm );
+	}
+
+	.acsp-definition dt:first-child {
+		margin-top: 0;
+	}
+
+	/* The plugin's own tables become stacked cards: each cell is labelled
+	 * from its header via the data-label attribute the templates emit, so no
+	 * information is lost and nothing scrolls sideways. */
+	.acsp-wrap .acsp-table.is-stacking thead {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip: rect( 0 0 0 0 );
+		clip-path: inset( 50% );
+	}
+
+	.acsp-wrap .acsp-table.is-stacking tbody tr {
+		display: block;
+		padding: var( --acsp-space-3 ) 0;
+		border-bottom: 1px solid var( --acsp-border );
+	}
+
+	.acsp-wrap .acsp-table.is-stacking tbody th,
+	.acsp-wrap .acsp-table.is-stacking tbody td {
+		display: block;
+		padding: var( --acsp-space-1 ) var( --acsp-space-4 );
+		border: 0;
+	}
+
+	.acsp-wrap .acsp-table.is-stacking tbody td[data-label]::before {
+		content: attr( data-label );
+		display: block;
+		margin-bottom: 2px;
+		color: var( --acsp-text-soft );
+		font-size: var( --acsp-text-xs );
+		font-weight: var( --acsp-weight-semibold );
+		text-transform: uppercase;
+		letter-spacing: 0.03em;
+	}
+
+	.acsp-wrap .acsp-table.is-stacking .check-column {
+		width: auto;
+	}
+
+	.acsp-form-foot {
+		position: static;
+		box-shadow: var( --acsp-shadow-sm );
+	}
+
+	.acsp-reports-toolbar,
+	.acsp-wrap .search-box {
+		width: 100%;
+	}
+
+	.acsp-wrap .search-box input[type="search"] {
+		flex: 1 1 auto;
+		min-width: 0;
+	}
+
+	.acsp-wrap .tablenav .tablenav-pages {
+		justify-content: flex-start;
+	}
+}
+
+@media screen and ( max-width: 600px ) {
+	/* Two stat cards still fit side by side on a phone and save a screen of
+	 * scrolling; below this they stop being readable and go single file. */
+	.acsp-stats,
+	.acsp-columns .acsp-stats {
+		grid-template-columns: repeat( 2, minmax( 0, 1fr ) );
+	}
+
+	.acsp-scan-summary {
+		grid-template-columns: repeat( 2, minmax( 0, 1fr ) );
+	}
+
+	.acsp-actions .acsp-btn {
+		width: 100%;
+	}
+
+	.acsp-dialog-foot {
+		flex-direction: column-reverse;
+	}
+
+	.acsp-dialog-foot .acsp-btn {
+		width: 100%;
+	}
+}
+
+@media screen and ( max-width: 380px ) {
+	.acsp-stats,
+	.acsp-columns .acsp-stats {
+		grid-template-columns: minmax( 0, 1fr );
+	}
+
+	.acsp-scan-summary {
+		grid-template-columns: minmax( 0, 1fr );
+	}
+}

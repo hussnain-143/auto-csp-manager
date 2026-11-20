@@ -1,0 +1,55 @@
+/**
+ * Auto CSP Manager — admin sidebar icon.
+ *
+ * This is the only stylesheet the plugin loads on every admin screen, because
+ * the sidebar is on every admin screen. Every selector is scoped to the
+ * plugin's own menu id, so it cannot affect anything else in wp-admin.
+ *
+ * The mark is applied as a CSS mask rather than as a background image, so the
+ * icon inherits `currentColor` from the menu item. That means it takes the
+ * right colour in every admin colour scheme — light sidebars and dark ones
+ * alike — and follows core's own hover, focus and current-item colours,
+ * instead of a fixed black or white asset that would be invisible in half of
+ * them. The artwork itself is the approved shield-and-swoosh mark, unchanged.
+ */
+
+#adminmenu #toplevel_page_acsp .wp-menu-image::before {
+	content: "";
+	display: block;
+	width: 20px;
+	height: 20px;
+	margin: 0 auto;
+	background-color: currentColor;
+	-webkit-mask-image: var( --acsp-menu-icon );
+	mask-image: var( --acsp-menu-icon );
+	-webkit-mask-repeat: no-repeat;
+	mask-repeat: no-repeat;
+	-webkit-mask-position: center;
+	mask-position: center;
+	-webkit-mask-size: 20px 20px;
+	mask-size: 20px 20px;
+}
+
+/* The current and hovered menu item in core's default scheme is near-white on
+ * dark; the mask follows it automatically. Only the resting opacity is tuned,
+ * to match the weight of the neighbouring dashicons. */
+#adminmenu #toplevel_page_acsp .wp-menu-image {
+	opacity: 1;
+}
+
+#adminmenu #toplevel_page_acsp:not( .wp-has-current-submenu ):not( :hover ) .wp-menu-image::before {
+	opacity: 0.75;
+}
+
+/* Browsers without mask support fall back to no icon at all, which would
+ * leave the item looking broken, so give them the gold mark as a background
+ * image instead. */
+@supports not ( ( -webkit-mask-image: none ) or ( mask-image: none ) ) {
+	#adminmenu #toplevel_page_acsp .wp-menu-image::before {
+		background-color: transparent;
+		background-image: var( --acsp-menu-icon-fallback );
+		background-repeat: no-repeat;
+		background-position: center;
+		background-size: 20px 20px;
+	}
+}

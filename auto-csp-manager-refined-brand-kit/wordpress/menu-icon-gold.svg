@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" role="img" aria-labelledby="title">
+<title id="title">WordPress sidebar icon menu-icon-gold.svg</title>
+<g transform="translate(0 0) scale(0.145)">
+      <path d="M55 125
+               C31 143 14 166 22 184
+               C32 207 69 204 107 185
+               C126 176 145 164 159 151
+               C132 181 91 207 55 211
+               C20 214 1 196 8 173
+               C13 154 33 135 55 125 Z"
+            fill="#A97912"/>
+      <path d="M120 13
+               L203 51
+               L200 116
+               C198 163 169 197 120 222
+               C71 197 42 163 40 116
+               L37 51 Z"
+            fill="none" stroke="#D6A72C" stroke-width="16"
+            stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M78 113 L108 143 L165 86"
+            fill="none" stroke="#252525" stroke-width="19"
+            stroke-linecap="round" stroke-linejoin="round"/></g>
+</svg>

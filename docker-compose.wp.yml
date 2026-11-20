@@ -1,0 +1,80 @@
+# A throwaway WordPress for looking at the plugin in a browser.
+#
+# This is NOT the test harness. `docker-compose.test.yml` runs PHPUnit and
+# PHPCS and is what `bin/ci.sh` uses. This file exists because the test suites
+# verify behaviour but cannot see a rendered page, and the 1.2.0 release found
+# three defects that only appeared once the screens were drawn in a browser.
+#
+#   docker compose -f docker-compose.wp.yml up -d wp
+#   docker compose -f docker-compose.wp.yml run --rm cli core install \
+#       --url=http://localhost:8777 --title="CSP Test Site" \
+#       --admin_user=admin --admin_password=admin \
+#       --admin_email=admin@example.test --skip-email
+#   docker compose -f docker-compose.wp.yml run --rm cli plugin activate auto-csp-manager
+#
+# Then open http://localhost:8777/wp-admin/.
+#
+# Tear down completely, database included:
+#
+#   docker compose -f docker-compose.wp.yml down -v
+#
+# The credentials above are deliberately trivial. This stack binds to
+# localhost, keeps its database in tmpfs and is destroyed with `down -v`;
+# never expose it or reuse those credentials anywhere real.
+
+services:
+  wpdb:
+    image: mariadb:10.11
+    environment:
+      MARIADB_ROOT_PASSWORD: wordpress
+      MARIADB_DATABASE: wordpress
+      MARIADB_USER: wordpress
+      MARIADB_PASSWORD: wordpress
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+    # The database is disposable; keeping it in memory means `down -v` really
+    # does leave nothing behind.
+    tmpfs:
+      - /var/lib/mysql
+
+  wp:
+    image: wordpress:6-apache
+    depends_on:
+      wpdb:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:8777:80"
+    environment:
+      WORDPRESS_DB_HOST: wpdb
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+      # Surface notices and warnings instead of hiding them: this stack is
+      # here to catch exactly that kind of thing.
+      WORDPRESS_DEBUG: 1
+    volumes:
+      - wp-core:/var/www/html
+      # The working copy is mounted live, so an edit is visible on reload.
+      - .:/var/www/html/wp-content/plugins/auto-csp-manager
+
+  cli:
+    image: wordpress:cli
+    depends_on:
+      - wp
+    user: "33:33"
+    environment:
+      WORDPRESS_DB_HOST: wpdb
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+    volumes:
+      - wp-core:/var/www/html
+      - .:/var/www/html/wp-content/plugins/auto-csp-manager
+    entrypoint: ["wp"]
+    command: ["--info"]
+
+volumes:
+  wp-core:

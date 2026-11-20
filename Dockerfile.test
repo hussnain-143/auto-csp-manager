@@ -1,0 +1,10 @@
+# PHP image for the integration suite: mysqli for the WP test library,
+# subversion to fetch it, and Composer for the dev dependencies.
+FROM php:8.3-cli
+
+RUN apt-get update \
+	&& apt-get install -y --no-install-recommends subversion default-mysql-client unzip git ca-certificates \
+	&& docker-php-ext-install mysqli \
+	&& rm -rf /var/lib/apt/lists/*
+
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer

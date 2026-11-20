@@ -1,0 +1,1 @@
+# Auto CSP Manager — Refined Brand Kit\n\nSee guidelines/BRAND-GUIDELINES.md for asset inventory and implementation notes.\n

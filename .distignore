@@ -1,0 +1,67 @@
+# Auto CSP Manager — what must NOT go into the distributed plugin.
+#
+# Everything here stays in the development repository. bin/build-release.sh
+# does not read this file as its source of truth: it copies an explicit
+# allowlist instead, which fails closed rather than open. This file documents
+# the same decision in the form WP-CLI's `wp dist-archive` expects, so either
+# tool produces the same package.
+
+# --- Version control ---------------------------------------------------
+.git
+.gitignore
+.gitattributes
+.github
+
+# --- Packaging ---------------------------------------------------------
+.distignore
+build
+*.zip
+
+# --- Tests -------------------------------------------------------------
+tests
+phpunit.xml.dist
+phpunit-integration.xml.dist
+phpunit.xml
+phpunit-integration.xml
+.phpunit.result.cache
+coverage
+
+# --- Coding standards --------------------------------------------------
+phpcs.xml.dist
+phpcs.xml
+.phpcs-cache
+
+# --- Build and development tooling -------------------------------------
+# composer.json is dev-only: the plugin loads its classes with require_once
+# and needs no autoloader at runtime.
+bin
+composer.json
+composer.lock
+vendor
+Dockerfile.test
+docker-compose.test.yml
+docker-compose.wp.yml
+package.json
+package-lock.json
+node_modules
+
+# --- Engineering documentation -----------------------------------------
+AUDIT.md
+RELEASE-CHECKLIST.md
+
+# --- Design sources ----------------------------------------------------
+# The approved brand kit is the source artwork. Only the four SVGs the
+# plugin actually references ship, and those live in assets/brand/.
+auto-csp-manager-refined-brand-kit
+
+# --- Local noise -------------------------------------------------------
+.DS_Store
+._*
+Thumbs.db
+.idea
+.vscode
+screenshots
+*.log
+*.sql
+.env
+.env.*
